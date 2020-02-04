@@ -10,39 +10,56 @@ library(flexdashboard)
 library(ggplot2)
 library(tidyverse)
 library(data.table)
-```
 
-Column {data-width=650}
------------------------------------------------------------------------
 
-### Chart A
-
-```{r include=FALSE}
 fread(file = "./o-ring-erosion-or-blowby.data") -> oringData
 
 str(oringData)
+
 ```
+
+
+
+
+### Historical Launch Temperatures and Challenger Launch Day Forecast
 
 
 ```{r}
 ggplot(data = oringData, mapping = aes(x = orderflight, y = launchtemp)) +
   geom_point() +
   geom_text(aes(label=launchtemp),hjust=0, vjust=0) +
-  geom_hline(yintercept=36, color = 'red')
+  geom_hline(yintercept=29, color = 'red') +
+  labs(title = "Launch Day Temperatures for Each Shuttle Launch", 
+       x = "Temporal order of flight", y = "Launch temperature (degrees F)") +
+  theme_linedraw()
 ```
 
-Column {data-width=350}
------------------------------------------------------------------------
+***   
+Here we have the launch day temperatures (F) for all the launches preceding the upcoming Challenger launch.
 
-### Chart B
+The red line at the bottom is the predicted temperature for the Challenger launch.
+
+
+
+
+
+### O-Ring Thermal Distress by Launch Day Temperature
 
 ```{r}
-
+ggplot(data = oringData, mapping = aes(x = launchtemp, y = numthermdis)) +
+  geom_point() +
+  geom_vline(xintercept=29, color = 'red') +
+  stat_smooth(method = "loess") +
+  scale_x_reverse() +
+  labs(title = "Number of O-Rings Experiencing Thermal Distress vs Launch Day Temperature",
+       x = "Launch Temperature (Degrees F)", y = "Number of Rings Distressed") +
+  theme_linedraw()
+  
 ```
 
-### Chart C
 
-```{r}
+***   
+Red Line indicates launch day temperature forecast
 
-```
+
 
